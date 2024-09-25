@@ -1,0 +1,38 @@
+To run the MongoDB Commands in VS Code Command is "mongosh"
+To check the data bases Commad is "show dbs", "use DATABASE_NAME"
+To Check the collections of Database Command is "show collections"
+-----------------------------------------
+To Activate the Virtual Environment  "./venv/Scripts/activate"
+To run the FAStAPI the Command is "uvicorn FILE_NAME:NAME_USED_IN_FILE --reload
+-----------------------------------------
+Meta Data= Tag, Image ID, Date Created, Image Size
+-----------------------------------------
+Token = Header + Payload + Signature
+-----------------------------------------
+import secrets
+
+# Generate a 32-byte random secret key
+secret_key = secrets.token_hex(16)
+print(f"Secret Key: {secret_key}")
+---------------------------------------------
+from passlib.context import CryptContext
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+plain_password = "123456"
+hashed_password = hash_password(plain_password)
+print(f"Hashed Password: {hashed_password}")
+---------------------------------------------
+#Command used to create a new Project in Reactnpm reate vite
+npm create vite@latest <my-react-app> --template react-ts
+-----------------------------------------------------------
+mysql -u root -p =>Command to run the SQL Compiler in CMD
+_______________________
+Commnads to link SQL to VSCODE:-
+THE BELOW Commands NEED TO BE EXECUTE First in CMD and Later should use the Same Credentials in VScode to link up
+mysql> create user 'pavantej05'@'%' identified with mysql_native_password by'2002';
+mysql> grant all privileges on *.* to 'pavantej05'@'%';
+mysql> flush privileges;
+----------------------------------------------------------

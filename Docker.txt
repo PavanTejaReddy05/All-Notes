@@ -1,0 +1,41 @@
+A given volume can be mounted into multiple containers simultaneously. When no running container is using a volume, the volume is still available to Docker and isn't removed automatically. You can remove unused volumes using "docker volume prune"
+-------------------------------------------
+
+1.Edit main.py with the below code, or else you can try on developing your own python code
+2.print("Docker and GFG rock!")
+3.FROM python:latest
+  COPY main.py /
+  CMD [ "python", "./main.py" ]
+4.$ sudo docker build -t python-test .
+5.$ sudo docker run python-test
+6.$ docker images
+7.REPOSITORY TAG IMAGE_ID CREATED SIZE afrozchakure/python-test latest c7857f97ebbd 2 hours ago 933MB
+8.docker tag <image-id> <your dockerhub username>/python-test:latest
+  $ docker tag c7857f97ebbd afrozchakure/python-test:latest
+9.$ docker push afrozchakure/python-test
+10.To remove all versions of a particular image from our local system, we use the Image ID for it.
+  $ docker rmi -f af939ee31fdc
+11.Now run the image, it will fetch the image from the docker hub if it doesn’t exist on your local machine.
+   $ docker run afrozchakure/python-test
+---------------------------------------------------------------
+1.$ docker run <image_name>
+  To give name of container
+  $ docker run --name <container_name> <image_name>
+---------------------------------------------------------------
+1.docker ps -a flag =shows us all the containers, stopped or running.
+2.docker ps -l flag =shows us the latest Conatainer
+3.docker ps -q flag =shows only the ID of Conatainer
+----------------------------------------------------------------
+1.$ docker stop <container_ID>
+2.$ docker start <container_ID>
+3.$ docker pull <image_name>
+4.$ docker rm {options} <container_name or ID>
+   OPTIONS:-
+   -f flag: remove the container forcefully.
+   -v flag: remove the volumes.
+   -l flag: remove the specific link mentioned.
+----------------------------------------------------------------
+To delete the image in docker. You can delete the images which are useless from the docker local storage so you can free up the space
+
+docker rmi <image ID/ image name>
+    

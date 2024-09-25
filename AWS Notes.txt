@@ -1,0 +1,33 @@
+AWS:
+===
+-----------------------------------------------------------------------
+1.CLOUD==>Instead of Buying the Physical Server to Deploy the Application we can use Virtualisation and can use virtual Server with IP Addresses and can work accordingly with lesser Costs.
+
+2.PRIVATE CLOUD===>If Team A uses Cloud with their Instance and that Team A are not allowed to give the instance to Other organizations. 
+
+3.PUBLIC CLOUD===>Anyone with AWS OR AZZURE Account Irrespective of any organization can create instances Ex:-Amazon, Microsoft, Google
+->Can create a Virtual Private cloud in a Public Cloud
+-----------------------------------------------------------------------
+
+IAM:--
+IAM Service is used to create IAM user or child User from Root user
+IAM in AWS is a combination of Both Authentication & Authorization for child or IAM User
+IAM helps to create & describe the user details, user permissions
+(USERS + POLICIES + GROUPS) + Roles ==IAM
+Users=User Details(Credentials , Info of User)
+Policies= What are the actions can user do
+groups= Category of user (Helps to Set the Policies in smart way in single step) by creating the category of people only can do particular actions
+Roles = Giving Temporary Access to AWS Account with [Access Key + Secret Access key + Session Token]
+
+-----------------------------------------------------------------------
+EC2=Elastic Cloud Compute
+Elastic= in AWS Many Services have prefix "Elastic" that can increase or decrease the service
+Cloud= in AWS cloud
+Compute= Req Instance(CPU + RAM + Disk)
+So EC2=Give me a Virtual Server in AWS cloud which is in Elastic Nature
+EC2 Instance:--(EC2 Creation, EC2 Instance Connection, To deploy application in EC2 Instance, How access the application from outside world) 
+-----------------------------------------------------------------------
+
+VPC==Virtual Private Cloud:
+if a person needs to reach the Application it should go through the below path
+Person--->Internet Gateway ---> Public Sub Net ---> Load Balancer ---> Route Table ---> Security Group--->Application

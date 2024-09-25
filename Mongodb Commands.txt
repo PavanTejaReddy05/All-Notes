@@ -1,0 +1,256 @@
+use <data base name> #To create or open the Database
+----------------------------------------------------------------------------------
+show collections
+----------------------------------------------------------------------------------
+db.mycollection.insertOne({
+    "name": "John Doe",
+    "age": 30
+});
+----------------------------------------------------------------------------------wow
+Company> db.Employees.find({"Name":"Pavan"},{_id:0})
+[ { Name: 'Pavan', Age: 22, Gender: 'M' } ]
+Company>
+----------------------------------------------------------------------------------
+Company> db.Employees.find({},{_id:0})
+[
+  { Name: 'Pavan', Age: 22, Gender: 'M' },
+  { Name: 'Teja', Age: 21, Gender: 'M' },
+  { Name: 'Renu', Age: 22, Gender: 'F' }
+]
+----------------------------------------------------------------------------------
+Trail> db.Col1.find({},{"name":1,"cuisine":1,"restaurant_id":1}).limit(3)
+[
+  {
+    _id: ObjectId('66693d68c3c926b4efebe562'),
+    cuisine: 'Bakery',
+    name: 'Morris Park Bake Shop',
+    restaurant_id: '30075445'
+  },
+  {
+    _id: ObjectId('66693d68c3c926b4efebe563'),
+    cuisine: 'Hamburgers',
+    name: "Wendy'S",
+    restaurant_id: '30112340'
+  },
+  {
+    _id: ObjectId('66693d68c3c926b4efebe564'),
+    cuisine: 'Irish',
+    name: 'Dj Reynolds Pub And Restaurant',
+    restaurant_id: '30191841'
+  }
+]
+----------------------------------------------------------------------------------
+Company> db.Employees.find({},{_id:0}).sort({"Name":1})
+[
+  { Name: 'Pavan', Age: 22, Gender: 'M' },
+  { Name: 'Renu', Age: 22, Gender: 'F' },
+  { Name: 'Teja', Age: 21, Gender: 'M' }
+]
+Company>
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Name":/^Re/})
+[
+  {
+    _id: ObjectId('66693aa1421a4a8d18cdcdf8'),
+    Name: 'Renu',
+    Age: 22,
+    Gender: 'F'
+  },
+  {
+    _id: ObjectId('66696b84f533a493aecdcdf6'),
+    Name: 'Revanth',
+    Age: 23,
+    Gender: 'F'
+  }
+]
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Name":/^Re/},{_id:0,"Age":0})
+[ { Name: 'Renu', Gender: 'F' }, { Name: 'Revanth', Gender: 'F' } ]
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Name":/Re/},{_id:0,"Age":0})#Used to find the value from ending
+----------------------------------------------------------------------------------
+Company> db.Employees.updateOne({"Name":"Pavan"},{$set: {Address: { State: 'AndhraPradesh', District: 'Cuddapah', Town: 'Proddatur' }}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+----------------------------------------------------------------------------------
+Company> db.Employees.find({})
+[
+  {
+    _id: ObjectId('66693aa1421a4a8d18cdcdf6'),
+    Name: 'Pavan',
+    Age: 22,
+    Gender: 'M',
+    Address: { State: 'AndhraPradesh', District: 'Cuddapah', Town: 'Proddatur' }
+  },
+  {
+    _id: ObjectId('66693aa1421a4a8d18cdcdf7'),
+    Name: 'Teja',
+    Age: 21,
+    Gender: 'M'
+  },
+  {
+    _id: ObjectId('66693aa1421a4a8d18cdcdf8'),
+    Name: 'Renu',
+    Age: 22,
+    Gender: 'F'
+  },
+  {
+    _id: ObjectId('66696b84f533a493aecdcdf6'),
+    Name: 'Revanth',
+    Age: 23,
+    Gender: 'F'
+  }
+]
+----------------------------------------------------------------------------------
+Company> db.Employees.updateOne({"Name":"Teja"},{$set: {Address:{"State":"Andhra Pradesh","District":"Nellore","Town":"Nellore Urban"}}})
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Gender":"M"},{"Address.Town":1,_id:0})
+[
+  { Address: { Town: 'Proddatur' } },
+  { Address: { Town: 'Nellore Urban' } }
+]
+Company>
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Address.State":{$in:["AP","AndhraPradesh"]}},{_id:0})
+|||||||||||||||||||||||||||||||||||||||||||||$nin=not_in||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+[
+  {
+    Name: 'Pavan',
+    Age: 22,
+    Gender: 'M',
+    Address: { State: 'AndhraPradesh', District: 'Cuddapah', Town: 'Proddatur' }
+  },
+  {
+    Name: 'Teja',
+    Age: 21,
+    Gender: 'M',
+    Address: {
+      State: 'AndhraPradesh',
+      District: 'Nellore',
+      Town: 'NelloreUrban'
+    }
+  },
+  {
+    Name: 'Renu',
+    Age: 22,
+    Gender: 'F',
+    Address: { State: 'AP', District: 'Ananthapur', Town: 'Ananthapur' }
+  }
+]
+Company>
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Age": {$gte:23}})
+[
+  {
+    _id: ObjectId('66696b84f533a493aecdcdf6'),
+    Name: 'Revathi',
+    Age: 23,
+    Gender: 'F'
+  }
+]
+Company>
+----------------------------------------------------------------------------------
+Company> db.Employees.find({"Address":{$exists:true}},{"Name":1,_id:0})
+[ { Name: 'Pavan' }, { Name: 'Teja' }, { Name: 'Renu' } ]
+Company>
+----------------------------------------------------------------------------------
+Trail> db.Col1.find({"cuisine":{$exists:true},"cuisine":{$not:{$eq:'Ice Cream, Gelato, Yogurt, Ices'}}},{cuisine:1,_id:0})
+[
+  { cuisine: 'Bakery' },
+  { cuisine: 'Hamburgers' },
+  { cuisine: 'Irish' },
+  { cuisine: 'American ' },
+  { cuisine: 'Jewish/Kosher' },
+  { cuisine: 'American ' },
+  { cuisine: 'Jewish/Kosher' },
+  { cuisine: 'Delicatessen' },
+  { cuisine: 'American ' },
+  { cuisine: 'American ' },
+  { cuisine: 'American ' },
+  { cuisine: 'Chinese' },
+  { cuisine: 'American ' },
+  { cuisine: 'Jewish/Kosher' },
+  { cuisine: 'Delicatessen' },
+  { cuisine: 'American ' },
+  { cuisine: 'American ' },
+  { cuisine: 'Delicatessen' },
+  { cuisine: 'Delicatessen' },
+  { cuisine: 'Delicatessen' }
+]
+Type "it" for more
+----------------------------------------------------------------------------------
+Trail>Trail> db.Col1.find({"cuisine":{$exists:true},"cuisine":{$eq:"Hamburgers"}},{"cuisine":1,_id:0}).limit(20)
+----------------------------------------------------------------------------------
+Trail> db.Col1.distinct("name",{"name":{$exists:true}})#distinct is the keyword which is used to remove the Duplicates or same values for the particular field and gives the OUTPUT
+----------------------------------------------------------------------------------
+Trail> db.Col1.distinct("name",{"name":{$exists:true}}).length#Tp find the len of the data
+----------------------------------------------------------------------------------
+Trail> db.Col1.find({grades:{$size:2}},{name:1,grades:1,_id:0}).limit(2)#Command Size is Used to find the No.of Elements in the Grade
+[
+  {
+    grades: [
+      {
+        date: ISODate('2014-06-21T00:00:00.000Z'),
+        grade: 'A',
+        score: 5
+      },
+      {
+        date: ISODate('2012-07-11T00:00:00.000Z'),
+        grade: 'A',
+        score: 10
+      }
+    ],
+    name: 'Manhem Club'
+  },
+  {
+    grades: [
+      {
+        date: ISODate('2014-06-25T00:00:00.000Z'),
+        grade: 'A',
+        score: 10
+      },
+      {
+        date: ISODate('2012-04-17T00:00:00.000Z'),
+        grade: 'A',
+        score: 8
+      }
+    ],
+    name: 'The River Cafe'
+  }
+]
+----------------------------------------------------------------------------------
+PDE> db.Details.find({"email":/@gmail.com/},{"name":1,"email":1,_id:0}).limit(5)
+[
+  { name: 'Gunnar Ankunding PhD', email: 'melody.collier@gmail.com' },
+  { name: 'Cleta Mann', email: 'conn.milford@gmail.com' },
+  { name: 'Dr. Hyman Haley DDS', email: 'alanis41@gmail.com' },
+  { name: 'Ms. Nedra Corkery', email: 'karl03@gmail.com' },
+  { name: 'Barrett Treutel', email: 'jaskolski.rosemary@gmail.com' }
+]
+----------------------------------------------------------------------------------
+Company> db.Employees.aggregate([{$group:{_id:"$Age",count:{$sum:1}}}])
+[
+  { _id: 21, count: 1 },
+  { _id: 23, count: 1 },
+  { _id: 19, count: 1 },
+  { _id: 22, count: 2 }
+]
+----------------------------------------------------------------------------------
+Company> db.Employees.aggregate([{$match:{Age:22}},{$project:{_id:0,Address:0}}])
+[
+  { Name: 'Pavan', Age: 22, Gender: 'M' },
+  { Name: 'Renu', Age: 22, Gender: 'F' }
+]
+----------------------------------------------------------------------------------
+PDE> db.Details.insertMany([{Name:"Tulasi", Age:21,Gender:"Female", Qualification:{Degree:"B.Tech",University:"Padmavati University",CGPA:7.5},PhNo:123456789,Address:{State:"AndhraPradesh",District:"Palnadu",Town:"Vinukonda"}}])
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('6672af665997598339cdcdf7') }
+}
+PDE>
+

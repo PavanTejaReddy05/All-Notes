@@ -1,0 +1,20 @@
+"This is B. Pavan Teja Reddy."
+"I graduated from SRM University Chennai with a degree in Electronics and Computer Engineering."
+"It is a specialization of ECE."
+"I Completed my graduation with 8.5 CGPA"
+"I have completed an internship at TATA Group on Data Visualization."
+"I Have Done projects on Online Voting System Using Block Chain, Vehicle to Vehicle Communication Using Long Range."
+"For the past 4 month5, I have been interning at a startup branch called AxiomIO on DevOps Course"
+"In my Internship I got trained on Docker Containeraization, API's and In DataBase I'm good at MongoDb" 
+"Now I'm proficient in executing Linux commands and using Git."
+"My hobbies include traveling and listening to music."
+
+
+
+My name is B. Pavan Teja Reddy. I graduated from SRM University Chennai with a degree in Electronics and Computer Engineering, specializing in ECE, and completed my graduation with an 8.5 CGPA.
+
+I have completed an internship at TATA Group focused on Data Visualization. Additionally, I have undertaken projects such as an Online Voting System using Blockchain and Vehicle-to-Vehicle Communication using Long Range technology.
+
+For the past four months, I have been interning at a startup branch called AxiomIO, where I have been trained in DevOps. My training has included Docker containerization, APIs, and MongoDB. I am also proficient in executing Linux commands and using Git.
+
+In my free time, I enjoy traveling and listening to music.

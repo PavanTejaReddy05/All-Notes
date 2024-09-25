@@ -1,0 +1,87 @@
+SQL Commands:-
+=============
+	1.Create--------=>create database <db_name>;
+	2.Show----------=>(SHOW Tables;),(SHOW TABLE STATUS LIKE 'movieslist';)==>commands helps to show info about table.
+	3.Set-----------=>(update movie_cast set Role_Name="Shivudu & Bahubali" where Role_Name="Shivudu";)
+	4.Insert--------=>(INSERT INTO Self_Details(Name, Age, Address, Ph_No) values(......),(.......),(......);)
+	5.Update--------=>(update movie_cast set Role_Name="Shivudu & Bahubali" where Role_Name="Shivudu";)
+	6.Delete--------=>DELETE FROM movieslist WHERE Movie_id >= 11;
+	7.Drop----------=>drop database <db_name>;==To delete the database
+	8.Turncate------=>(truncate table movies)========All data will be cleared in the table and table will exists and become empty.
+	9.Use
+	10.Check=>(Quantity INT CHECK (Quantity>0);)
+	11.Where=>(select Movie_id, Title, Release_Year,Director_id from movieslist where Release_Year>=2015;)
+										    where Genre="Action"
+	12.Join=>(select * from Self_Details SD join Edu_Details ED on SD.Person_id=ED.Person_id where SD.Person_id=1;)===helps to show both table values of particular ID
+		inner join===>(select *from {table1} inner join {table2} on table1.id=table2.id)===It displays common one in both tables.
+		Left join====>(select * from {table1} left join {table2} on table1.id=table2.id)===It displays all Left Side Column Values and right side column shows common id values here  												   		*)if no value found for Common Id it shows Null.
+		Right join===>(select *from {table1} right join {table2} on table1.id=table2.id)===It displays all right side table data ,but it shows null if no data found in right 																	side table column.
+		cross join===>(select * from {table1} cross join {table2})===Each Left side value of table1 connects to all right side table values and displays it.
+		Self join====>???
+	13.Union----------=>select * from {table1} union {table2}=======It combine both the data into one table.
+				
+	14.Like------------=>(update Self_Details set Name="Pavan Teja Reddy" where Name like "%avan%";)
+	15.Rename--------=>(rename table movies to films;)
+	16.SubQuerys-----=>(select title, budget from movies where budget>(select Avg(budget) from movies);) This is command that shows all budget movies which are greater than Avg Budget.
+	--------
+	1.And
+	2.or
+	3.Not<>
+	4.in
+	5.between
+	--------
+	1.Count
+	2.Sum
+	3.Max
+	4.Min
+	5.Avg
+	-------
+	1.On Delete Cascade=>(It is the command needed to add while creating the table. It helps to delete all the data of the particular item in child tables)
+========================================================================
+DESCRIBE movieslist;			      }
+DELETE FROM movieslist WHERE Movie_id >= 11;  }
+SHOW Tables;				      }	=> Rare Commands
+ALTER TABLE movieslist AUTO_INCREMENT = 1;    }
+SHOW TABLE STATUS LIKE 'movieslist';          }
+========================================================================
+create table MoviesList(
+    Movie_id int Auto_Increment Primary Key,
+    Title varchar(255) not null,
+    Release_Year year,
+    Genre varchar(100),
+    Language varchar(50),
+    Duration_Mins int,
+    rating decimal (3,1),
+    Director_id int
+);
+------------------------------------------------------------------------
+1.Describe <table_Name>;=>(it shows the Field_types)
+
+2.UserName varchar(50) unique;=>(It helps to store only Unique values to the table)
+________________________________________________________________________________________
+3.====>>ALTER TABLE your_table_name
+  	MODIFY Release_Year YEAR DEFAULT YEAR(CURRENT_DATE);
+			{{{{
+			ALTER TABLE movieslist
+			MODIFY Release_Year YEAR;
+			DELIMITER
+        		(
+			CREATE TRIGGER before_insert_movieslist
+        		BEFORE INSERT ON movieslist
+        		FOR EACH ROW
+        		BEGIN
+            			IF NEW.Release_Year IS NULL THEN
+                			SET NEW.Release_Year = YEAR(CURRENT_DATE);
+            			END IF;
+        		END;
+			)
+			DELIMITER ;
+			}}}}
+________________________________________________________________________________________
+4.create table cart(
+ 	product_id INT PRIMARY KEY Auto_Increment,
+	price DECIMAL(10,2),
+	Quantity INT CHECK (Quantity>0));
+
+5.select movie_id, Box_Office_Collection-budget as Profit_or_Loss from box_office;
+

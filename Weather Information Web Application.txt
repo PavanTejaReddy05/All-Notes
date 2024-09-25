@@ -1,0 +1,10 @@
+Weather Information Web Application
+Developed a web app using FastAPI to show real-time weather. It gets data from the OpenWeatherMap API. Users enter their name and city, and the app shows personalized weather details like temperature and humidity. This project showcases my skills in API integration and web development.
+
+
+
+
+
+
+
+

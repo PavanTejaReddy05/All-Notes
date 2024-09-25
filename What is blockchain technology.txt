@@ -1,0 +1,82 @@
+What is blockchain technology?
+
+Blockchain technology is a decentralized and distributed ledger system that records transactions across multiple computers in a way that ensures the security, transparency, and immutability of the data.
+
+
+2.How does a blockchain work?
+A blockchain works by maintaining a continuously growing list of records, called blocks, that are linked and secured using cryptographic techniques.
+
+3.What is a block in a blockchain?
+A block in a blockchain is a fundamental unit that contains a collection of data related to transactions and other information. Each block is linked to the previous one, forming a chain.
+
+
+4.What is the difference between blockchain and cryptocurrency?
+ while blockchain is the foundational technology that can be applied in many areas, cryptocurrency is a financial application of blockchain focused on creating and managing digital currencies.
+
+5.What are the key features of blockchain technology?
+Decentralization, Immutability, Transparency, Security
+
+6.What is a decentralized ledger?
+A decentralized ledger is a digital database that is replicated, shared, and synchronized across multiple participants (nodes) in a network. Unlike traditional centralized databases that are managed by a single entity, a decentralized ledger operates without a central authority, ensuring that no single participant has complete control over the data. 
+
+7.What is a smart contract?
+A smart contract is a self-executing contract with the terms of the agreement directly written into code.
+
+8.What are the benefits of using blockchain technology?
+Decentralization, Security, Traceability
+
+
+9.What is a public vs. private blockchain?
+ Public blockchains offer transparency, decentralization, and a trustless environment, while private blockchains provide control, privacy, and scalability, making them ideal for enterprise applications.
+
+
+
+10.How are transactions verified in a blockchain network?
+Transactions in a blockchain network are verified through a process that involves consensus among the network participants. 
+
+
+What are some real-world applications of blockchain technology?
+Charity, Cryptocurrency, Online Voting System
+
+12.How does blockchain ensure security and privacy?
+Distribution of Control:,
+Each block in the blockchain contains a cryptographic hash of the previous block's data, creating a chain that is resistant to tampering. 
+
+
+13.What is the role of miners in a blockchain network?
+Transaction Validaters, Block Creations, and rewarded for their effort by solving hard puzzles
+
+
+14.What is a blockchain fork?
+ leading to the creation of a new chain and potentially new cryptocurrencies. 
+
+
+15.What are tokens and how are they used in blockchain networks?
+They can be used for purchasing goods and services or transferring value between users.
+
+
+16.How can blockchain be integrated with IoT (Internet of Things)?
+Users can control access to their IoT data through blockchain-based identity and access management systems.
+
+
+17.What are zero-knowledge proofs and how are they used in blockchain?
+Zero-knowledge proofs (ZKPs) are cryptographic protocols that allow one party (the prover) to prove to another party (the verifier) that a statement is true without revealing any information beyond the validity of the statement itself.
+
+18.How does sharding work in blockchain networks?
+Sharding is a technique used in blockchain networks by partitioning the blockchain into smaller, more manageable parts called shards. Each shard processes a subset of transactions independently
+
+
+19.What are the different types of attacks on blockchain networks and how can they be mitigated?
+51% Attack
+ An attacker gains control of more than 50% of the network's mining or validation power, allowing them to manipulate transactions
+Sybil Attack
+  An attacker creates multiple fake identities (Sybil nodes) to voting power in the network.
+
+20.How can blockchain be used for identity verification and management?
+Self-Sovereign Identity (SSI)  having control over their own digital identities without relying on central authorities.
+Immutable Records immutability ensures that once identity information is recorded, it cannot be altered retroactively without consensus.
+
+21.How do you create a blockchain from scratch using Python?
+   Validation, Hashing, Calculating Hash, add block
+
+
