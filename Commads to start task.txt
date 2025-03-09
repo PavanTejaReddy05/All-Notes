@@ -1,9 +1,12 @@
+To convert "C" user to Local Disk "D"==>cd D:
+----------------------------------------------------------
 To run the MongoDB Commands in VS Code Command is "mongosh"
 To check the data bases Commad is "show dbs", "use DATABASE_NAME"
 To Check the collections of Database Command is "show collections"
 -----------------------------------------
 To Activate the Virtual Environment  "./venv/Scripts/activate"
 To run the FAStAPI the Command is "uvicorn FILE_NAME:NAME_USED_IN_FILE --reload
+npm run dev ======>React file to run.
 -----------------------------------------
 Meta Data= Tag, Image ID, Date Created, Image Size
 -----------------------------------------
@@ -18,15 +21,14 @@ print(f"Secret Key: {secret_key}")
 from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
-plain_password = "123456"
-hashed_password = hash_password(plain_password)
+ data = R.dict()
+    data.pop("Confirm_Password")
+    data["Password"] = bcrypt.hash(data["Password"])  # Hash the password
 print(f"Hashed Password: {hashed_password}")
 ---------------------------------------------
 #Command used to create a new Project in Reactnpm reate vite
 npm create vite@latest <my-react-app> --template react-ts
+npm run dev ======>React file to run.
 -----------------------------------------------------------
 mysql -u root -p =>Command to run the SQL Compiler in CMD
 _______________________
@@ -36,3 +38,9 @@ mysql> create user 'pavantej05'@'%' identified with mysql_native_password by'200
 mysql> grant all privileges on *.* to 'pavantej05'@'%';
 mysql> flush privileges;
 ----------------------------------------------------------
+Angular:--
+npm install -g @angular/cli@16
+To create a new project ==>  ng new <project_name>
+To run the project  ==> npm start
+To create a new component ==> ng generate component SignIn
+To create a new Service ==> ng generate service task

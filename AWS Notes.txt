@@ -1,6 +1,10 @@
 AWS:
 ===
+
+
 -----------------------------------------------------------------------
+DAY:1
+
 1.CLOUD==>Instead of Buying the Physical Server to Deploy the Application we can use Virtualisation and can use virtual Server with IP Addresses and can work accordingly with lesser Costs.
 
 2.PRIVATE CLOUD===>If Team A uses Cloud with their Instance and that Team A are not allowed to give the instance to Other organizations. 
@@ -8,6 +12,7 @@ AWS:
 3.PUBLIC CLOUD===>Anyone with AWS OR AZZURE Account Irrespective of any organization can create instances Ex:-Amazon, Microsoft, Google
 ->Can create a Virtual Private cloud in a Public Cloud
 -----------------------------------------------------------------------
+DAY:1
 
 IAM:--
 IAM Service is used to create IAM user or child User from Root user
@@ -20,14 +25,805 @@ groups= Category of user (Helps to Set the Policies in smart way in single step)
 Roles = Giving Temporary Access to AWS Account with [Access Key + Secret Access key + Session Token]
 
 -----------------------------------------------------------------------
+DAY:2
+
 EC2=Elastic Cloud Compute
 Elastic= in AWS Many Services have prefix "Elastic" that can increase or decrease the service
 Cloud= in AWS cloud
 Compute= Req Instance(CPU + RAM + Disk)
 So EC2=Give me a Virtual Server in AWS cloud which is in Elastic Nature
 EC2 Instance:--(EC2 Creation, EC2 Instance Connection, To deploy application in EC2 Instance, How access the application from outside world) 
+Accessing the Application from Outside is done through MobaXterm
 -----------------------------------------------------------------------
+DAY:2
 
 VPC==Virtual Private Cloud:
 if a person needs to reach the Application it should go through the below path
-Person--->Internet Gateway ---> Public Sub Net ---> Load Balancer ---> Route Table ---> Security Group--->Application
+Person--->Instance[Internet Gateway ---> Public Sub Net ---> (NAT Gateway) --->Load Balancer ---> Route Table ---> Security Group--->Private Sub Net or Application]
+NAT Gateway is useful to hide the IP Address of the Server or Application
+
+-----------------------------------------------------------------------
+DAY:3
+
+in VPC(SG = Security Groups + NACL)
+*VPC is requested by DevOps Engineer based on the range in Ip Addrs Based [Ex:- IP Addrs(10.1.0.0/16) = 65536 Components or Subnets]
+*In VPC can have multiple projects and in each project can have Minor Projects.
+
+WorkFlow:--
+*User Enters into VPC through Internet gateway and Access the Load_Balancer through Public Subnet
+*Load Balancer have rights to access the Private Sub Net.
+
+==>We can Add more Security in Each Subnet Level using NACL or instead we can add Security in Application in EC2 Instance using Security Groups and NACL helps to increase the Security
+
+Primary Difference B/W SG and NACL:-
+__________________
+SG==> Security Groups manages the traffic to the Application by maintaining Particular Ports. Ex:-8080 or Any port
+SG==i)Inbound Traffic ii)Outbound Traffic
+User---Inbound Traffic-->[Instance[Application]]---Outbound Traffic--->Google.com
+Ex:-
+User--Inbound Traffic-->[Amazon.com]--Outbound Traffic--->RazoPay or AmazonPay
+User reaches Amazon Website and Amazon Website reaches Payment Website
+
+BY DEFAULT:
+AWS Restricts all Inbound Traffic(All Ports) to Application
+AWS Allows All Outbound Traffic(All ports Except Port:25) from Application
+_________________
+
+NACL==>Network Access Control List
+SG is Applied at EC2 Instance Level
+SG is only for allowing
+where
+NACL is Applied at Subnet Level
+NACL is for both Allowing and Denying
+
+Created a VPC and Instance with Subnet
+&
+connected the instance in Mobaxterm, now trying to access the python Application which is EC2 in VPC
+command to run in Mobaxterm to create a server and to run it is "python3 -m http.server 8000" 
+
+-------------------------------------------------------------------------
+Day:3
+
+ROUTE 53:-
+Route 53 in AWS Privides DNS as a Service.
+DNS=>Domian Name System
+DNS Service is the one that maps the domain Name with IP Address
+Every Application contains IP Address 
+Instead of Saying IP Address to others to Access the Application
+we can Simply say the Domain Name like Google.com, pavan.com or pavan.in or pavan.xyz
+
+So Route 53 lies between Internet gateway and Load Balancer
+This Route 53 helps to map the Domain Name to IP Address of a Load Balancer and after that the process is same
+To Purchase the Domain Name we can go to GoDaddy or AWS too 
+AWS Has Option that Domain Name can buy in GoDaddy and can integrate that Domain Name in Route 53
+Before Request got held the Route 53 goes to Header Section to find the Domain Name
+If the Domain Name Found then IP Address got reserved for it and the Req will go from Header Section through IP Address 
+-----------------------------------------------------------------------
+DAY:4
+
+Project:("D:\AWS\VPC Architecture with Private and Public Subnets with AutoScaling.png")
+1.Create a VPC with 4 subnets(2Private, 2Public) and 2 Availability Zones with NAT Gateway for each Availability Zone
+2.Create Auto Scaling in Ec2 Service by creating the template, After creating the template use the template for creating Auto-Sca and assign the Instances for both private subnets for Auto-Scal
+	-Increase the desired size  and Maximum size upto 4 if required to increase
+	-Instead of creating Load Balancer directly, Create the LOad Balancer later
+3.Install the Application in Instances (But u cannot find the Public Ip adrress of instance because instances are in Private Subnet)
+	-To Login the Instance in Mobaxterm we need to use Bastion Host(Lies in Public SubNet) to coonect instances which are in Private SUbNet
+	-To Create a Bastion Host we need to create a instance in same VPC and open the instance in Mobaxterm and click connect button by selecting the one of the instance which is in 	 private subnet and copy the Example command in ssh and make the .pem file executable in Mobaxterm by logging the Bastion Host Instance
+	-Now connection is successfull to instance of Private Subnet
+	-After Connection install the Application in the Private Subnet Instance
+	-{vim index.html(write the Script. save&Quit it ":wq") 
+	  python3 -m http.server 8000
+4.create a Load Balancer by going into EC2 Service 
+	-Application Load Balancer
+	-Set the Name of Load balancer with Same VPC and Select for both Availability zones(Ensure both should be Public)
+	-Select Security Group and set as HTTP Protocol and Port 8000 and create target group
+	-Give a name to the tareget Group and select the Same VPC and Click Next
+	-Select the both instances which belongs to Private Subnet and click "include as Pending Below" and create target group
+5.After the Load Balancer is created edit and Add "HTTP port:80 Anywhere" for the inbound traffic in Security group of particular project
+6.After completing all the above steps go to LoadBalancer in Ec2 Service and go to Respective project and Copy the domain Name and use that in Browser to Access the Application.
+-----------------------------------------------------------------------
+Day:5
+
+S3 Bucket:-
+s3==>Simple Storage Service 
+Characteristics:--Scalable, Highly Available, Performance, Cost Effectiveness & Secure
+S3 got populared because of Eleven 9's the Number= "99.99999999999" 99.Eleven 9's
+S3 is the Service which helps to store Pics, Videos, Folders or Any Files
+If any Data is stored in S3 then it'll be Available Globally and can restrict for Specific Organisation or company or visibility for a specific person
+HTTP Protocol is used to access the data in S3 Bucket
+Object Size cannot be more than 5TB
+No objection to create Multiple Buckets
+If Details got recorded if anyone tries to Access the S3 Bucket
+S3 has the feature that Version Control System 
+that able's to store all edited files belongs to same file
+==>We can see the Server access login option for the file in bucket which helps to restrict the access for Specific people and can record the Access Details
+
+Demo 1:
+To Restrict only one Specific S3 bucket files to a IAM User
+-From root user go to the specific bucket and go to Permissions, Edit Bucket Policy
+	--Go to Add New Statement
+_______
+{
+  "Version": "2012-10-17",
+  "Id": "RestrictBucketToIAMUsersOnly",
+  "Statement": [
+    {
+      "Sid": "AllowOwnerOnlyAccess",#Anything about the task
+      "Effect": "Deny",#To allow or Deny
+      "Principal": "*",  # * For Everyone
+      "Action": "s3:*",search for s3 in right side and make it all actions on S3
+      "Resource": [				#Add the Name of the bucket in resource by clicking Add resource button and bucket names
+        "arn:aws:s3:::your-bucket-name/*",  #this line is for the bucket 
+        "arn:aws:s3:::your-bucket-name"     # thus line is for resources in the bucket
+      ],
+      "Condition": {			#If there is No Condition S3 bucket will get blocked for Parent User Too
+        "StringNotEquals": {		#So condition to be Added to Allow for the parent user
+          "aws:PrincipalArn": "arn:aws:iam::AWS_ACCOUNT_ID:root"
+        }
+      }
+    }
+  ]
+}
+_________
+
+Demo 2:
+S3 is the best option to host the static website
+-Edit the static website option in properties
+-unblock all public access in Properties
+-change the bucket policy to this in permissions
+___
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "PublicReadGetObject",
+			"Effect": "Allow",
+			"Principal": "*",
+			"Action": [
+				"s3:GetObject"
+			],
+			"Resource": [
+				"arn:aws:s3:::pavantejatrailbucket/*"
+			]
+		}
+	]
+}
+-----------------------------------------------------------------------
+DAY 6:
+
+AWS CLI:---
+CLI==>Command Line Interface
+AWS CLI Acts as a layer between User and AWS API
+There are Specific Shell Commands to invoke AWS CLI in terminal or Local Machine
+NOW:--
+	AWS <Parameters>
+By submitting  AWCla Translates the Request into API CALL and then AWS will create resources
+
+
+If Inputs Passed to AWS CLI
+We can Create S3 through the console
+Ex: Creating a S3 bucket with API
+"POST api.aws.com/s3/create"
+
+Terraform	}
+CFT		}==All these does the same thing by calling API's as like CLI
+Cloud Formation	}
+
+CLI is used because it can be Executed Fastly 
+Ex: AWS S3 ls
+To Execute Same Example in Terraform or CFT we need to write Declarative YAML Files and extra things and need to Execute
+
+Instead of Using Coding part for CLI, Terraform, CFT AWS has Abstraction Layer for it
+Install Aws Console and Check the version in cmd "aws --version"
+login the Aws Account through the terminal or CMD
+-aws configure
+(Give the Access key and Secret Key which can get from Credentials part from the Top right corner of AWS Account)
+(It will take the default region and Output display Format just click Enter)
+__
+To invoke the aws commands are
+-api call that Aws understands
+-make the call
+-output
+__
+Now "aws s3 ls"(Give it directly without invoking if it not works then invoke and give the command)
+
+To create instance or s3 bucket through CLI, we need to give big commands for CLI 
+Simply Search Aws cli Reference and u can find the commands to execute the respective task
+
+Ex:- S3 AWS CLI Reference
+
+ex2:- aws ec2 run-instances --region us-east-1  --image-id ami-0e86e20dae9224db8 --instance-type t2.micro --subnet-id subnet-096f7cbcb58a44ba8 --security-group-ids sg-00982e7ba577bc198
+Ex2 shows the details of the particular Ec2 instance
+-----------------------------------------------------------------------
+DAY 6 & 7:
+
+AWS CFT:--
+CFT==>Cloud Formation Templates
+
+CFT Concept is basically used to create the infrastructure on AWS and they implement the principles of IaC (Infrastructure as Code)
+-Difference B/W CLI and CFT
+-components
+-features
+-Tips & Tricks to create CFT
+Most Repeated Interview Ques: Do u use Terraform or CFT(Cloud Formation Template)
+===========================
+Ans:
+Both CLI and CFT both have same functionality which is used to manage, but CFT implements the principle of IaC (Infrastructure as Code) which CLI does not
+
+If New IAC tool wants to build then it should act as a middle man between User and one or multiple Cloud Providers
+-User have to submit template in the format of YAML or Json anything   in declarative or Versioned in nature  
+	YAML is most widely used by DevOps Engineers because Kubernetes or Ansible works with YAML and YAML has Advantage of having Comments
+	Declarative means by reading the template anyone should understand the Details of the files. Its just like Index Page 
+-Iac uses that template and makes that data to understand by Cloud   Provider.
+CFT Only supports Yaml or Json
+CFT has one more feature called Drift Detection 
+Drift Detection detects the changes done by other one in the infrastructure
+
+* CFT can be created through CLI or UI
+To create a CFT we need to maintain some Components in YAML File
+	-Versioning(only 1 Version for CFT)
+	-Description(What exactly CFT is About)	
+	-Meta Data(Info of the CFT like Owner Details etc..)
+	-Parameters(Giving Some Variables to the CFT on runtime)
+	-Rules(to maintain some rules)
+	-Mapping(Assigning the variables to parsameters)
+	-conditions
+	-resources(Most Imp component need to be in file)ex: Ec2 Resource Required or S3 bucket Resource Required etc...
+	-Output
+To get Clear Info browse "AWS CFT Anatomy" and template  reference/Resource property reference in nav bar
+
+To Create a CFT 
+-Search for Cloud Formation Service in AWS Portal
+-create the stack to get CFT
+(The Written Template is need to be submitted to Stack then stack will convert the template request to the API using CFT Service)
+-"Select template Designer" Option to create the template and select button to create template
+-Drag the resources(S3 or EC2) you want to the Canvas then automatically the Template will get created in Templates
+-Save the YAML file in local Machine and upload to create stack
+-upload the template file to Stack and click next and finally submit it.
+-File got created and if u Edit anything in the CFt we can see the edits using Detection 
+
+Difference B/W CLI & CFT is
+CLI is used when the one who wants to perform quick and Short Action
+CFT is used when the one who wants to create multiple resources and to create tags
+
+
+By installing Extentions(YAMl & AWS Toolkit) we can write templates in VS Code 
+-----------------------------------------------------------------------
+DAY: 8
+
+CI/CD(Code Commit)
+
+CI/CD:==>Continuous Integration/ Continuous Deployment
+Before CI/CD Service by AWS the Process of CI/CD is
+-Need to post the code in a location called GitHub
+-If someone Commits the code then GitHub triggers the webbook and Jenkins Pipeline
+-Within the pipeline we have multiple tasks like Building the Application, Unit testing, Static Owner etc with Jenkins System, Maven 
+-Finally the built product that can be a docker image and can deploy in Kubernetes or EC2 Instance
+
+Instead of using 4 different tools like GitHub, Jenkins Pipeline, building tool, Kubernetes. AWS introduced Services like
+1.AWS Code Commit (GitHub)
+2.AWS Code Pipeline (Jenkins Pipeline)
+3.AWS Code Build (Maven or Jenkins Sys)
+4.AWS Code Deploy (Shell Script etc..)
+
+Code Commit:--
+-Give the permission to the IAM user for Code commit Service (Code commit Power User)Policy Name
+-Code commit is the service by AWS to create a repository in AWS like GitHub
+-create the repository and download the  Secret and Access Key
+-Generate the Git Credentials through Security Credentials in IAM User
+-in terminal "aws configure"
+-Give the Secret Key and Access Key
+-Give the git credentials from the Security Credentials of IAM User
+
+*AWS code commit has some Restrictions as compared to other version Control Systems
+-----------------------------------------------------------------------
+Day: 8
+
+CI/CD (Code Pipeline)
+
+Whenever the Code commits, VCS continues with 2 declarative pipelines through Jenkins which responsible of i)CI and ii)CD
+These pipelines are typically responsible for implementing CI and invoking CD.
+*Jenkins most used tool for CI Platform.
+CI has Multiple Stages they are
+	 i)Code Checkout
+	ii)Build & Unit Test Cases
+       iii)Code Scan
+	iv)Image Build (Docker Image Build)
+	 v)Image Scan
+	vi)Image Push
+After Completion all Stages in CI
+there are multiple ways to invoke CD
+	-Ansible
+	-Shell Scripting
+	-Argo
+-Git Ops are the best way for continuous Delivery
+ 
+In AWS CI
+The code is placed in Code Commit
+-The Code Commit triggers Code Pipeline 
+-AWS Code Pipeline Invokes CI and Invokes CD, which is different to Jenkins Pipeline
+-AWS Code Pipeline Invokes CI which is called AWS Code Build(It includes all stages of CI)
+-AWS Code Pipeline Invokes CD which is called AWS Code Deploy and it will deploy in Kubernetes Cluster or Ec2 Instance
+-----------------------------------------------------------------------
+DAY: 9
+
+Project On CI and building the Appplication using AWS:--
+
+Store a Simple Application in GitHub Repository that contains .py, requirements.txt, Docker File & .yaml.
+-Ensure to do this project in IAM user
+-Create a Project through Code Build using Code Build service
+-Give the Name of Project and Give the Path of the File located(GitHub Repository Link)
+-Make the connection to the GitHub
+-Extract the file either from Public Repository or Private
+-In Environment Field Select the Ubuntu OS for Best Practice
+-Make the Runtime Standard
+-Select the Latest Image
+-Go to Additional Config and Enable the flag in Privileged.
+-give the role of service or can create a roll in IAM Service which will be used for Build-Service and give full Access for SSM.
+-Go to Build Spec (Build Specification) which is used by AWS code Build
+-Build Spec Includes all Stages CI like Code Check, Build Code, Code Scan
+-We can create the Build Spec file as if we needed like
+[	env:
+	   parameter-store:(which is used to store all sensitive Information like credentials that we use while docker build)
+
+	Phases:
+	   env:
+  		variables:
+    		    UserName: "/SampleProject_on_CI/docker_credentials/Username"
+    		    Password: "/SampleProject_on_CI/docker_credentials/Password"
+    		    Url: "/SampleProject_on_CI/docker_credentials/User-Registry/url"
+	   install:
+	 	runtime-versions:
+		    (name)python:3.21(version)  [if the Application is on Java we'll give Java and its version for runtime.]
+	   pre-build:(which is used to make sure to maintain Frameworks like Flask etc... in requirments.txt file)
+		commands:
+		   -pip install -r /path/requirements.txt
+	   build:(Making the whole as Docker Image)
+		commands:
+		   -cd /path/file
+		   -echo "Building the Docker Image"
+		   - docker build -t "$UserName/$Url/simple-python-app:latest" .
+      		   - docker push "$UserName/$Url/simple-python-app:latest"
+	   post-build:(Which are used to CD)
+		commands:
+		   -echo "Build is Successful"
+]
+After storing all Sensitive Info in "System Manager/Parameter Store" execute all above commands click 'create build project'
+System Manager/Parameter:-
+-create "Project_Name/Docker_credentials/Username"
+-Make the type Secure String and KMS Key Source should be Secure "My Current Account"
+-Do the Same for "Project_Name/Docker_credentials/Password"
+-Do the Same for "Project_Name/Docker_credentials/User_Registry/url"
+
+-----------------------------------------------------------------------
+DAY: 10
+
+Skipped day-15 AWS Ultimate CICD pipeline | End to End Demo 
+
+AWS Cloud Watch:-(Monitors Resources and Applications)
+
+Cloud Watch is a service which watches the Activities that runs in cloud
+Cloud Watch is like Gate Keeper or Watch man for AWS
+Cloud Watch is for Monitoring, Alerting, Reporting, Logging
+
+-Metrics==>A metrics can be a Info of any Service that runs
+	-(Storage Details, CPU & memory Utilization, number of requests are done)
+-Alarms===>Ex: Hey Cloud Watch if CPU Utilization is reached 60% then send an Alarm to a Specific Email.
+-Custom Metrics===>By Default CW monitors only few, like CPU Utilization and to find Memory Utilization or EC2 Server Utilization we use Custom Metrics.
+-Log===>It gives info about that specific service has accessed the Specific S3 Bucket or Something.
+        Example: A Ec2 Instance Accessed code deploy on Specific time without your Interaction.
+
+CW is helpful in cost Optimization.
+For a DevOps Engineer CPU Utilization is one of the most important metric for their projects.
+
+Demo:-  1
+
+-create a EC2 Instance
+-U can find the working of the instances from cloud watch or else u can see CPU utilization directly by entering into  RunningInstanceFile/monitor Section
+-Cloud Watch will send the data of Utilization for Every 5 Mins but if u want "Detailed Monitoring" for each Minute then can enable "Detailed Monitoring" in Monitor Section 
+-To check the Utilization, Need to login the created instance in Mobaxterm and create file with .py extension with vim editor and save it by ":wq"
+-u can see the utilization in cloudwatch for the specific Instance that we run and can see directly by entering into Ec2 Service and go to RunningInstanceFile/monitor Section.
+
+-Now we are going to create Alarm for the CloudWatch which helps to make an alert If the CPU Utilization reaches 50% or above 
+-go to cloudwatch and Create Alarm and Select the metric that is the Instance to check CPU Utilization
+-For demo Purpose we can change as Maximum for every 1 minute
+-Enable the option "Whenever the CPU Utilization" is "Greater/Equal" and give threshold value as 50 as 50%.
+-Click on next and Select New Topic instead of Existing SNS Topic which helps to send email temporarily
+-Give the email and click create topic and go to "next" button in down of the page
+-Give the Alarm Name and Provide the Automated Message and create the Alarm
+-go to Given Gmail and confirm it to get the mails from Alarm
+-to get the alert mail, need to run the .py file of instance in MobaXterm.
+
+-----------------------------------------------------------------------
+DAY: 10 & 11
+
+AWS Lambda:--
+
+-AWS lambda is used in various Services like S3, Cost optimization, Event Driven Action, CloudWatch.
+==>Lambda Function in the pointy of view of DevOps Engineer
+*Even Lambda belongs to Compute Family as Like EC2 Instance
+but Ec2 runs as Server and need to scale up and Scale Down manually
+lambda has 2 primary things that are i)Compute ii)Serverless
+We can run python Application through compute but no need to give parameters like no. of CPU's or other are required
+Lambda creates Resources that r require Automatically based on the Application and whenever the work got completed it automatically scales down.
+Example:
+-If a Food App enters into Payment Field and It gets Scaled Up & whenever it Completes its process, it automatically got Scaled Down
+This is why Lambda Architecture is a Serverless
+
+Serverless (Lambda)==> it wont have IP Address or subnets etc... but Autoscaling is Enabled
+Server (EC2) ==>It contains a specific IP Address, Subnets etc...
+
+Development Team or Architecture team or Design Team decides that Application should follow Server Architecture or Serverless Architecture
+
+Lambda look into all services in AWS which aren't using and still in running state.
+By generating a script a Lambda function got created and govern or monitor all Services
+
+Now if u want to run 10 python scripts daily morning for 5 mins we use Lambda Function by generating the Script that will trigger  by event Driven and will get scaled down after 5 mins
+If we use EC2, we need to create instance and need to be deleted everyday manually
+
+Lambda Serverless is primarily used for Cost Optimization, Security
+Ex: 
+	If someone creates EBS volume GP2 instead of GP3 but the company do not wants to use gP2 because of Lesser Security so the new Lambda will be created that to check everyday morning that if anyone uses GP2 instead of GP3 then AWS sends the Notification through SNS
+
+Ex:	
+	If anyone grants S3 Public Access permission then AWS Lambda will send notification automatically
+
+Creating the Lambda:--
+
+-Search for Lambda and create a Function
+-Can have options that 
+	->can create function through own code
+	->can create function through inbuilt functions by AWS
+	->can create function through local machines and need to push code to docker as image and need to give details of image and Amazon ECR image URl
+-Lambda function can only write in specific Languages by choosing the Language in Runtime
+-Go to Advance Configurations and Enable "Function URL" HTTPs that helps us to access using URL if not u can only access Application in AWS Environment & Choose who can Access Like IAM User only or None(Anyone)
+-click "Create Function"
+-After creation u can see options like Trigger and Destination and Down the Code will be available 
+-in the code there'll be built-in code that AWS can call only that Specific built-in function and can call other functions through that built in function like function() 
+-Mainly the function name should be 'Lambda_handler"
+-if wants to edit the name of the built-in function, needs to go to Configuration Section to edit it
+
+In Configuration Section:-
+-Triggers: which are used to trigger with Even handler
+-Roles: By default the Lambda function will create new role while creating the Lambda function instead can use existing role and can give extra permissions for it
+-Destinations: It is the place where all the output data will get stored
+-Function URL: using the URL in this section we can see the output of the Application that we wright like echo, print() etc...
+-Environment Variables: which is used to create parameter/Variables that require for Application
+-VPC: Lambda function can created in VPC
+
+-----------------------------------------------------------------------
+DAY: 11
+
+COST OPTIMIZATION:--
+
+DevOps Engineers major goal is Cost Optimization
+if anyone created an instance with attaching the volume and the one forgot to delete volumes and deleted just Instances Because of this AWS charges more 
+or S3 bucket got created and no one is using the data from and due this too the AWS will charge for it
+NOW
+Devops Engineer has two options that are i)notification(SNS through Cloud Watch)
+					 ii)Devops Engineer has rights to delete the Specific Resource(EC2 or S3 or etc..)
+-For Cost Optimization we'll use Lambda Function
+-DevOps Engineers writes code in python (Boto3-Module) in Lambda Function  
+	-A Lambda function is created for each specific task, like to find the volumes which are not attached to Ec2 by contacting the AWS API's 
+-Lambda Function can trigger using Cloud Watch
+
+Project:
+There are some EBS Volume Snapshots(Backup's) which are created by a developer with EC2 Instance Connection and Later the Developer has Deleted Volumes, Instances
+and Snapshots are not deleted
+Case:1 Just EC2 Instance is Deleted
+Case:2 Both eC2 Instance and volumes both are deleted but Snapshots aren't
+::In Both the Cases the Snapshots are useless because if Snapshots are not connected to volumes or if volumes are not connected to EC2 Instance
+
+SO NOW It would be better to delete the Snapshots
+
+TASK:1=>To Fetch all the EBS Snapshots
+TASK:2=>To Filter out that snapshots that are staled (Once Identified Proceed to Delete them)
+
+PROCESS:
+Step:1==>To create a EC2 Instance with Default Volume given by AWS
+Step:2==>Check the volume is created or not "Created Instance/Storage/Volume"
+step:3==>Go to EC2 Dashboard and create Snapshot by giving Volume ID of Particular Instance
+==>Creating the Lambda Function which won't delete the Snapshots that are connected to Volumes and Instances
+Step:4==>Go to Lambda and create a function with Python Language and give the Name as "Cost-Optimization-ebs-snapshots"
+Step:5==>After Completion of Creation, Go to code section in Lambda and paste code from GitHub of Abhishek_Veeramalla and save it 
+Step:6==>Click on the Deploy Button and test button after Saving it in Code Section of lambda Function
+Step:7==>Give the Test Name as Test and Save it because triggering is done Manually (If the Triggering is done through Cloud Watch then no need to create test)
+Step:8==>Give a Click on Test Button Again but It'll get Failed because
+[Role Doesn't have Specific Permission] Permissions: Delete & Describe for Snapshots and Describe volumes and EC2 Instances
+[By Default Lambda Function Execution is only for 3 Seconds so change it to 10 Seconds]
+by going to the "Created_Lambda_Fuction/Configuration/GeneralConfiguration/Timeout"=10 Seconds
+(MAKE SURE KEEP THE LAMBDA FUNCTION EXECUTION SHOULD BE VERY LESS BECAUSE OF AWS CHARGES)
+Step:9==>Give the Permission for the role by going into "Created_Lambda_Fuction/Configuration/Permissions/ROLE_ASSIGNED_FOR_IT"
+Step:10==>Add the Permissions for the role
+(BUT THERE"LL BE NO POLICIES ON SNAPSHOT TO DESCRIBE OR DELETE)
+Step:11==>Create a Policy and Give the Service as a EC2 and Give as Snapshot to filer the Actions, Enable Delete, Describe Actions to Snapshot and Add the Describe Volume, Describe Ec2 Instances
+Step:12==>Enable the resources as ALL and NEXT Button
+Step:13==>Give the Name of the Policy and Create the Policy, Now Policy got created
+Step:14==>go to "Created_Lambda_Fuction/Configuration/Permissions/ROLE_ASSIGNED_FOR_IT" add the Policy that we created
+Step:15==>Run the Code again now It will work
+Step:16==>Code will get Executed but There'll be no change because of no Taled Snapshots
+Step:17==>Now delete the Instance then Automatically the volume will get deleted and run the code in Lambda Function
+Output: --
+	(Display's that Snapshot got Deleted)
+Step:18==>Create a volume Directly without creation of instance and create a snapshot by Adding the volume ID to it and Run the code in Lambda Function
+Output: --
+	(It will delete Snapshot but it won't delete the Volume because code is to Delete only Taled Snapshots)
+
+-----------------------------------------------------------------------
+DAY: 12 
+
+CLOUD FRONT: --
+AWS Says Cloud Front Solves the CDN IssueDeom
+CDN Stands for Content Delivery Network
+We use CDN daily in You tube, Insta, Amazon, Flipkart etc... in all image & Video sharing Websites
+
+Ex: -
+	If a person from Australia uploads a reel or image in Insta then the File get stored in Central Storage which is in US
+	The People from Australia will get the data very Quickly because Central Storage lies very near to it
+	But If the other one from India wants to Access the file from Central Storage then the request should travel from multiple no. of Hops(Routers). Then it leads to more Loading time and lesser User Experience 
+
+CDN is Placed at Instagram Application point
+Now CDN Creates Local Copies of the file in the region
+if anyone tries to Access the file, The CDN gives the Local copies of the Same Region instead of Approaching the Central Storage
+
+Demo On Cloud Front:-
+-Create a S3 bucket with "www.example.com"
+-Enable Bucket Versioning and create the bucket
+-Open the created bucket and enable the "Static web hosting" in properties Section. and Give the file names if having index.html, error.html
+-Now upload the files(html, css)
+-Go to Service CLOUD FRONT and create a DISTRIBUTION
+-Fill the Origin Domain by giving the Web hosting S3 Bucket Name
+-For Demo Disable WAF
+-Origin Access cannot be Public so Enable Legacy Access identifies
+-By Generating the new OAI a new identity will get created and Enable "Yes Update Bucket Policy"
+-in Viewer Section Make it as "Redirect HTTP to HTTPS"
+-Make sure to delete CloudFront and S3 after completion of Demo because of hosting
+-Create the Distribution Now
+
+-----------------------------------------------------------------------
+DAY: 12
+
+AWS ECR VS DOCKER HUB: --
+
+In this Session 
+	How to Access, use, push and pull the Docker Image into ECR
+
+==> ECR is used to store and Manage the Container.
+For AWS "ECR" ==> Elastic Container Registry
+For Google Cloud "GCR"
+-By Default ECR Registry's are private in Nature and also have the option for Public Repository
+
+For Individual or Personal projects mostly stored in GitHub Registries
+For Organizational Projects mostly stored in ECR
+
+Demo on ECR: --
+-Search for ECR in AWS
+-create a repository and Selecting a Private or Public ECR is the initial Step while creating ECR & it cannot be changed after creation
+-Give a Repo Name
+(Image Scan Settings is Used to Scan the Image when we push the image into it)
+-So Enable Scan on push and create the repo
+-Now Using CLI Login through the command AWS Configure
+-create a Docker file "vim Dockerfile"
+(FROM Ubuntu:latest") save it :wq
+-u can find the commands that are used to push and create images in ECR/ViewPushCommands-Button
+-after Executing all three commands the image got created and will get pushed to ECR
+-----------------------------------------------------------------------
+
+DAY: 13 & 14:--
+
+ECS==> Elastic Container Service
+
+HOW ECS IS DIFFERNT TO OTHER KUBERNETES ORCHESTRATION SUCH AS EKS, on-premises KUBERNETES?
+
+-Both ECS & Docker works on Containerisation
+	but Docker Doesn't have Auto-Scaling(Used to create Instance) or Auto-Healing(Used to Run or UP the Container Automatically instead of Manual Execution) Capability
+AWS Introduced ECS which is not dependent on Kubernetes where as like EKS and Docker
+ECS have some keywords like Tasks, Services, Clusters
+	
+	Now In AWS by using 3 EC2 Instances(One is Master Node and two are worker Nodes), can create a Kubernetes Environment.
+	If we move out from AWS then the resources cannot be used agian which are created in AWS like Services, Tasks etc... So this is one of the Dis-Adv because in the world of multi-cloud or hybrid- cloud the user moves from one platform to other platform
+
+	*==> Kubernetes is one of the powerfull ruling as compared to other(Docker, AWS etc...) by bringing up the new Features
+-In kubernetes there is a concept called as Custom Resource Definition CRD's which is used to extend the capabilities of itself.
+-if there is lack of Specific Capability in Kubernetes then one can create a CRD to achieve the Capability.
+-As compared to AWS in Kubernetes there are hundreds of load balancers that can integrate.  and ECS can add features such as Advanced Web Application Firewalls, Advanced Security Features
+-ECS is a good Container Orchestration but i does not all capabilities such as Kubernetes.
+-Aws has ECS Aws also Supports EKS==> Elastic Kubernetes Service
+-Working with ECS is very Easy model by asking AWS for Conatiner Orchestration Solution Cluster or Container Orchestration Environment Cluster.
+-So with ECS we can use both Server and Serverless Model
+-By adding the Fargate to ECS where the Fargate is a complete Serverless Model. Just like Lambda Function a Farget is also a Serverless Architecture Model
+-If we add Fargate to EC2 then we need to monitor the health condition of instance.
+-Kubernetes has very complicated architecture like it contains control plane, worker nodes. In Control plane we have 5 more components &  worker nodes contains different Kubernetes components
+-Aws felt that Kubernetes is a Complicated nature and in future it may becomes even more complicated so AWS comes with ECS
+==>If interviewer Gives Option for Either ECS or EKS then better choose EKS to Impress the Interviewer
+
+
+Demo Structure of ECS:--
+-Create a Cluster in AWS ECS Service and can use farget or EC2 Instance to run Container
+-Go to Amazon ECR in ECS Dashboard and create Repository  and copy the URI of repository
+-Go to terminal and login the ECR through the command "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin <(REPOSITOY_URI)699584295734.dkr.ecr.ap-south-1.amazonaws.com>"
+-buid the repository comman==> doker build -t 699584295734.dkr.ecr.ap-south-1.amazonaws.com/demo-ecs-repo:latest .
+-push the image to Repo command==> docker push 699584295734.dkr.ecr.ap-south-1.amazonaws.com/demo-ecs-repo:latest
+(NOW WE HAVE CONTAINER IMAGE AND NEED TO USE THAT IMAGE IN ECS PLATFORM)
+-Need a Task Definition by creating a new Task Definition from ECS Dashboard
+-While creating the Task Definition give a name and for demo give some lesser Memory value like 1GB or 2GB.  
+-while creating the task definition there'll be a task roll which is used to make the running container to access the  other AWS Services like S3 Bucket or cloud watch service
+-(make sure to create a new role for "TASK EXECUTION ROLE" because we need to Monitor the container in cloud watch. So new role need to be created to monitor the Container.)
+-Give the Name for the Container-1 then fill the Repository URI with tag ":latest" and in PORT MAPPING give port as 3000 and can also add additional ports ex:80,443 depending upon what port the application is running on and finally go to button to create task Definition 
+-(After creating the Task Definition then can see that task definition is in ACTIVE State but the Container is not in running state)
+-After getting the Task as Active State make the task to run then only the task will run the container
+				[[FOR BETTER UNDERSTANDING WATCH THE VIDEO ONE MORE TIME]]
+-EKS is better raising than ECS by comparing all companies because Kubernetes comes with new features and options
+-----------------------------------------------------------------------
+DAY: 14
+
+Secret Management: --
+
+While working with CICD Implementation the DevOps Engineer needs to store some Important Data Privately like Docker Username, Registry Uri (To Upload Docker Image), or Database Credentials
+
+In AWS there are 3 main things that are
+	i)Systems Manager(AWS Service)
+	ii)Secret Manager(AWS Service)
+     ==>iii)Hashi corp Vault(By Downloading Hashi Software in Local Machine) & (Most Widely used by many Companies)
+*System Manager==> while working on CICD we have stored the Docker URL and username in System-Manager/Parameter-Store in Str format.
+	-by granting the permission through code pipeline or code build to IAM Role to access it from System Manager
+
+	-Docker Username, Docker URL can be stored in System Manager
+
+	-to retrieve the Info we can Assign IAM Role
+
+*Secret Manager==> while working with Sensitive Information, need to rotate Sensitive Info Automatically
+	-Secret Manager is used to Maintain to store highly Secured Info like Passwords, tokens etc.. which need to be changed for every 90 or 120 days.
+	-in Secret Manager we can add rotational Policy or can add Additional Security Configuration.
+	-to retrieve the data Add the IAM Role Capabilities to talk to the Secret Manager
+	-Secret Manager is will get a bill by end of the month as compared to System Manager
+
+
+	(Best Practice is using Combination of both System Manager and Secret Manager)
+*Hashi Corp ==> it is most widely used because It is a Open Source and has Retrieving Backup Functionality
+	-we can use Hashi Corp with any cloud and can transfer our Data to AWS or Azure instead System and Secret Manager can only helpful to AWS only.
+	-Hashi Corp has Additional Encryption Functionality
+-----------------------------------------------------------------------
+DAY: 14
+
+AWS Config :--
+
+Explanation with Example:
+	In every Organization there is particular rules that every EC2 Instances need to Enabled with Detailed Monitoring and every S3 Bucket need not to be in Public Access
+so, if there are any instance or Bucket which doesn't follow the rules by Organisation then using with AWS CONFIG we can find how many resources are in complaint or non complaint in nature
+
+To create the working of AWS Config, initially we need to create the rules from AWS Config Dashboard.
+-while creating the rule we can integrate the rule to Lambda Function.
+-If we created a rule on ec2 Instance then this AWS Config notify when instance got created, updated, deleted by integrating
+-AWS Config have some Default rules and as well DevOps Engineer need to write some custom rules
+-To create a rule need to create Lambda Function and need to know Compliances(Compliences==>on which we need to monitor like instance or S3 Bucket)
+
+Demo :
+	-Create a rule from AWS Config Dash board
+	-Select the option to create a custom rule for AWS Config & click the button to create the rule
+	(Make sure to create Lambda Function before creating a custom rule)
+_______________________________________________________________________
+		[Creating the Lambda Function]
+		-go to lambda Service and create a function from Scratch & give the Function name
+		-Give the Runtime as Python and Select the role that needs to use Existing role or to create a new role with Basic Lambda Permissions
+		-and create the Lambda Function
+		-After creating Function write the code that Lambda Function need to work on
+CODE THAT TO RUN LAMBDA FUNCTION ::	
+import boto3 #boto3 is used to talk to AWS Resources
+import json
+
+def lambda_handler(event, context):
+
+    # Get the specific EC2 instance.
+    ec2_client = boto3.client('ec2')
+    
+    # Assume compliant by default
+    compliance_status = "COMPLIANT"  
+    
+    # Extract the configuration item from the invokingEvent
+    config = json.loads(event['invokingEvent'])
+    
+    configuration_item = config["configurationItem"]
+    
+    # Extract the instanceId
+    instance_id = configuration_item['configuration']['instanceId']
+    
+    # Get complete Instance details
+    instance = ec2_client.describe_instances(InstanceIds=[instance_id])['Reservations'][0]['Instances'][0]
+    
+    # Check if the specific EC2 instance has Cloud Trail logging enabled.
+    
+    if not instance['Monitoring']['State'] == "enabled":
+        compliance_status = "NON_COMPLIANT"
+
+    evaluation = {
+        'ComplianceResourceType': 'AWS::EC2::Instance',
+        'ComplianceResourceId': instance_id,
+        'ComplianceType': compliance_status,
+        'Annotation': 'Detailed monitoring is not enabled.',
+        'OrderingTimestamp': config['notificationCreationTime']
+    }
+    
+    config_client = boto3.client('config')
+    
+    response = config_client.put_evaluations(
+        Evaluations=[evaluation],
+        ResultToken=event['resultToken']
+    )  
+    
+    return response
+	}
+		-After Adding the Code add some Permissions in Lambda-Function/Configuration/Permissions and click on Role Name 
+		-Add the Set of Permissions for IAM User role
+		-Permissions:--CloudWatchFullAccess, AmazonEC2FullAccess, AWS_ConfigRole, AWSCloudTrail_FullAccess, AWSLambdaBasicExecution... 
+		
+_____________________________________________________________________
+	-Give the name for the rule and Provide the Lambda Function Name
+	-Can Enable the option to trigger for every Configuration changes or Periodic Trigger at particular time in a day
+	-Select the resources option and give AWS Resources for Resource Category to trigger resources and give EC2 instance for Resource type & go to next button and save it
+	(Ensure that Need to create a Lambda Function that monitoring Option is Enabled for the EC2 Instance and need to update to Config)
+	
+-----------------------------------------------------------------------
+DAY: 15
+
+Load Balancer:--
+there are 3 types of load balancer
+	-ALB==>Application Load Balancer(ALB is a costly Load Balancer)
+		--It has many Additional or advanced Capabilities
+	-NLB==>Network Load Balancer
+	-GWLB==>Gate Way Load Balancer
+-Initially Load Balancer is used to balance the 1000 requests from thousand users to all EC2 instance equally which helps to decrease the Slowness and Downtime of Application.
+-There are 100's of Load Balancer Technique.
+-If a user requests a webpage to the server and the server returns the webpage as response then this whole process is get done through OSI 7 Layers.
+OSI Layers:
+	-Layer7==>Application Layer Ex: Http or FTP or SEFT req from browser
+		->using this Layer can select the protocol to send the request 
+	-Layer6==>Presentation Layer Ex: SSL or TLS
+		->It is the layer used to encrypt or encode the request
+	-Layer5==>Session Layer 
+		->It is the layer where that Server receives and understands the Request from User
+	-Layer4==>Transport Layer
+		->In this layer the response from server split's the response into packages.
+		->It transmits the response Securely from server to user in Packets.
+	-Layer3==>Network Layer
+		->It is the Layer that requests travels through multiple routers from user to server
+	-Layer2==>Data-Link Layer
+		->It is the Layer that the final router is linked to Server through switch while Requesting 
+	-Layer1==>Physical Layer
+		->In this layer we can see the cables that are connected to
+			-Router to Switch
+			-Switch to Server 
+-DevOps Engineer or Development Engineer will decide that Application should use ALB or NLB
+-If want to perform Traffic Load Balancing in Layer 7 then ALB need to be used.
+-If want to perform traffic Load Balancing in layer 4 (Transport Layer) then NLB need to be used.
+
+Explanation:
+	If ALB is used then at Application Layer the ALB will work to Balance based on Host, Domain, Path etc...
+	NLB is used to perform Load Balancer without Interruption Ex: You tube, Gaming Application
+	Using NLB we can see Low Latency and High Data Transmission & NLB acts on Transport 
+	GWLB is used when working Virtual Appliances like VPN or Working for a customer that deals with Firewall Kind Application or VPN kind Application.
+	If a Application uses GWLB then the traffic should be highly secure. So GWLB transfers Highly Secured Packets.
+	If ALB is placed for a Firewall based application then ALB will be failed to Execute the Application because ALB cannot Provide Security
+	ALB or NLB provides some Lesser Security to the Application as compared to GWLB. 
+
+-->If a 10 hr video is got streaming in a website then we need to place NLB instead of ALB.
+	NLB has Sticky Session option that all packets will be combined into one and it'll go to single server.
+	If we Place ALB for a 10hr Video the ALB shares Packets to different Servers which leads to increase latency or may data transmission speed decreases.
+-----------------------------------------------------------------------
+Note Points:-
+NACL and SG plays very crucial role for the Security Purpose . These are the last point of Security for a Application
+____
+AUTO-SCALING is the process that
+If no. of Requests are increased then the Auto-Scaling increases the instances(Servers) Automatically
+____
+LOAD BALANCER helps to divide the reqs Equally to all servers & this load Balancers helps to send req to Server in VPC
+____
+BASTION HOST OR JUMP SERVER
+This bastion Host lies in Public Subnet and no one can reach the Server or EC2 instance in Private Subnet Directly but We can Access our Server or EC2 Instance through Bastion Host which lies in Public Subnet
+____
+
+Ques:If a Application Need to be Highly Available and Scalable, What do u do for this?
+Ans: For Availability ill deploy my applications in both Availability Zones
+     For Scalability I'll use Auto-Scaling for the Application
+Ques:If a Application is Two Tier how will u design it?
+Ans: Two tier Application is created by adding a Public and Private Subnet. Server lies in the Private Subnet.
