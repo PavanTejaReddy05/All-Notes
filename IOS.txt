@@ -1,0 +1,9 @@
+A rough estimate:
+
+Swift Basics + SwiftUI/UIKit → ~40 hours
+Xcode & Interface Builder → ~20 hours
+Networking & Data Persistence → ~30 hours
+Concurrency & Async Programming → ~25 hours
+Architecture & Design Patterns → ~25 hours
+Debugging, Testing, and CI/CD → ~30 hours
+App Store Distribution & Optimization → ~15 hours
